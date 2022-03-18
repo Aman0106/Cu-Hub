@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1057584097049",
+    "project_id": "cuhubapp-396b2",
+    "storage_bucket": "cuhubapp-396b2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1057584097049:android:22ae5080643e1914164788",
+        "android_client_info": {
+          "package_name": "com.example.cuhubapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1057584097049-6dhnpi2nj2u3knqmrji75gslsagluc7v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUeGypBLDWX5liHepKZAZLB1zfq9UKQ2w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1057584097049-6dhnpi2nj2u3knqmrji75gslsagluc7v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
