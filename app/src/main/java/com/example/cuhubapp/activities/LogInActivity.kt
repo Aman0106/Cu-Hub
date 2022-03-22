@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.example.cuhubapp.R
+import com.example.cuhubapp.classes.User
 import com.example.cuhubapp.databinding.ActivityLogInBinding
 import com.example.cuhubapp.databinding.FragmentNewChatBinding
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,22 +25,31 @@ class LogInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_in)
         supportActionBar?.hide()
+
+
         binding = ActivityLogInBinding.inflate(layoutInflater)
         setContentView(binding.root)
         db = FirebaseFirestore.getInstance()
 
         binding.btnSignIn.setOnClickListener {
-            Toast.makeText(this, "hoi", Toast.LENGTH_SHORT).show()
             val userId = binding.edtUserId.text.toString()
             val userPass = binding.edtPassword.text.toString()
-            Toast.makeText(this, "$userId and this is pass $userPass", Toast.LENGTH_SHORT).show()
             val usr = db.collection("users").document(userId)
 
             usr.get()
                 .addOnSuccessListener {
                     if(it.data!=null){
                         if (it.getString("password") == userPass){
-                            startActivity(Intent(this, MainActivity::class.java))
+                            val name = it.getString("name")
+                            val course = it.getString("course")
+                            val sec = it.getLong("section") //as Int?
+                            val grp = it.getString("group")
+                            val yer = it.getLong("year") //as Int?
+
+                            val intent = Intent(this, MainActivity::class.java).apply {
+                                putExtra("user", User(userId, name, course, sec, grp, yer))
+                            }
+                            startActivity(intent)
                         }
                         else
                             Toast.makeText(this, "Incorrect Password", Toast.LENGTH_SHORT).show()

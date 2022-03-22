@@ -11,4 +11,5 @@
     <color name="red_primary_dark">#D81313</color>
     <color name="grey">#939393</color>
     <color name="dark_grey">#555454</color>
+    <color name="dark_dark_grey">#272727</color>
 </resources>

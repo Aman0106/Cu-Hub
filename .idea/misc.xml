@@ -3,11 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout/activity_chat.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/layout/activity_log_in.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/fragment_chats.xml" value="0.35572916666666665" />
+        <entry key="app/src/main/res/layout/activity_test.xml" value="0.35572916666666665" />
+        <entry key="app/src/main/res/layout/content_test.xml" value="0.35572916666666665" />
+        <entry key="app/src/main/res/layout/fragment_chats.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/fragment_first.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/layout/fragment_new_chat.xml" value="0.35572916666666665" />
-        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.35572916666666665" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_second.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/layout/fragment_syllabus.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/layout/user_card.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/menu/bottom_menu.xml" value="0.35572916666666665" />

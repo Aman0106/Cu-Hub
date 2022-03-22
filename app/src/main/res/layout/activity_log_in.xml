@@ -32,9 +32,9 @@
         android:layout_below="@id/edt_user_id"
         android:layout_marginHorizontal="40dp"
         android:layout_marginTop="20dp"
-        android:paddingHorizontal="5dp"
-        android:maxLength="9"
-        android:hint="Password"/>
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:paddingHorizontal="5dp" />
 
     <Button
         android:id="@+id/btn_sign_in"

@@ -38,16 +38,17 @@
         app:layout_constraintTop_toBottomOf="@id/user_card_name" />
 
     <TextView
+        android:id="@+id/user_card_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="8dp"
         android:text="1:04"
-        android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@id/user_card_border" />
 
     <View
+        android:id="@+id/user_card_border"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="1dp"

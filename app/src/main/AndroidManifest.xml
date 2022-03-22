@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CuHubApp">
         <activity
+            android:name=".activities.ChatActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.LogInActivity"
             android:exported="true">
             <intent-filter>
@@ -20,8 +23,7 @@
         </activity>
         <activity
             android:name=".activities.MainActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
     </application>
 
 </manifest>
