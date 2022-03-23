@@ -32,7 +32,6 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
         curUser = intent.getParcelableExtra("user")!!
-        Toast.makeText(this, curUser.uid, Toast.LENGTH_SHORT).show()
 
         binding.bottomNavigation.setOnItemSelectedListener{
 
@@ -73,15 +72,24 @@ class MainActivity : AppCompatActivity() {
 
     private fun getUserList():ArrayList<User>{
         usersInSection = ArrayList()
-        firestoreDb.collection("users").document(curUser.uid!!)
+        usersInGroup = ArrayList()
+        firestoreDb.collection("users")
+            .whereEqualTo("course", curUser.course)
+            .whereEqualTo("year",curUser.yer)
+            .whereEqualTo("section",curUser.section)
             .get().addOnSuccessListener {
-                Toast.makeText(this, "${it.getString("name")}", Toast.LENGTH_SHORT).show()
+                for (usr in it){
+                    val user = setUser(usr)
+                    usersInSection += user
+                    if(usr.getString("group") == curUser.group)
+                        usersInGroup += user
+                }
+                replaceFragment(ChatsFragment())
             }
         return usersInSection
     }
 
-    private fun setUser(usr: QueryDocumentSnapshot):User{
-        Toast.makeText(this, "run", Toast.LENGTH_SHORT).show()
+    private fun setUser(usr: QueryDocumentSnapshot): User {
         val uid = usr.id
         val name = usr.getString("name")
         val course = usr.getString("course")
@@ -89,8 +97,6 @@ class MainActivity : AppCompatActivity() {
         val grp = usr.getString("group")
         val yer = usr.getLong("year")
 
-        val user = User(uid,name,course,sec,grp,yer)
-
-        return user
+        return User(uid, name, course, sec, grp, yer)
     }
 }

@@ -6,8 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
 import com.example.cuhubapp.R
+import com.example.cuhubapp.adapters.UserAdapter
+import com.example.cuhubapp.adapters.UsersNewChatAdapter
 import com.example.cuhubapp.classes.User
+import com.example.cuhubapp.databinding.FragmentNewChatBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,6 +28,10 @@ class NewChatFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var binding: FragmentNewChatBinding
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var userAdapter: UsersNewChatAdapter
     private lateinit var usersList: ArrayList<User>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +43,7 @@ class NewChatFragment : Fragment() {
         usersList = ArrayList()
         val bundle = arguments
         usersList = bundle?.getParcelableArrayList("usersInSection")!!
+        usersList = bundle?.getParcelableArrayList("usersInSection")!!
 
 
     }
@@ -43,13 +52,13 @@ class NewChatFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_new_chat, container, false)
+        binding = FragmentNewChatBinding.inflate(inflater,container,false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Toast.makeText(view.context, "name ${usersList.size}", Toast.LENGTH_SHORT).show()
+        setRecyclerView(view)
     }
 
     companion object {
@@ -70,5 +79,12 @@ class NewChatFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    private fun setRecyclerView(view: View){
+        userAdapter = UsersNewChatAdapter(view.context,usersList)
+        recyclerView = binding.usersRecyclerview
+        recyclerView.adapter = userAdapter
+        recyclerView.setHasFixedSize(true)
     }
 }

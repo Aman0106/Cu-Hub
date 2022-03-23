@@ -53,8 +53,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="15dp"
-        app:layout_constraintTop_toBottomOf="@id/txt_name"
-        android:background="@color/dark_grey"/>
+        app:layout_constraintTop_toBottomOf="@id/txt_name"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

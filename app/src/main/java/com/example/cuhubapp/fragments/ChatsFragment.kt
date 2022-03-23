@@ -52,7 +52,6 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         val bundle = arguments
         curUser = bundle?.getParcelable("user")!!
 
-
     }
 
     override fun onCreateView(

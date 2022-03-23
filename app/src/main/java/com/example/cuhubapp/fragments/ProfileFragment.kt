@@ -51,11 +51,24 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.cardTimeTable.setOnClickListener {
+            Toast.makeText(view.context, "ok", Toast.LENGTH_SHORT).show()
+        }
+        binding.cardSection.setOnClickListener {
+            Toast.makeText(view.context, "ok12", Toast.LENGTH_SHORT).show()
+        }
+        binding.cardGroup.setOnClickListener {
+            Toast.makeText(view.context, "ok3", Toast.LENGTH_SHORT).show()
+        }
+        binding.cardFaculty.setOnClickListener {
+            Toast.makeText(view.context, "ok4", Toast.LENGTH_SHORT).show()
+        }
+
+        
         setProfile(view)
     }
 
     private fun setProfile(view: View){
-        Toast.makeText(view.context, "this is name ${curUser.name}", Toast.LENGTH_SHORT).show()
         binding.txtName.text = curUser.name
         binding.txtUid.text = curUser.uid
     }

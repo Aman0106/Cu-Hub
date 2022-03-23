@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.CuHubApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/red_primary_dark</item>
+        <item name="colorPrimary">@color/red_primary</item>
         <item name="colorPrimaryVariant">@color/grey</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
