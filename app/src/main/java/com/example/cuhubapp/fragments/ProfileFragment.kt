@@ -1,5 +1,6 @@
 package com.example.cuhubapp.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,8 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.cuhubapp.R
+import com.example.cuhubapp.activities.StudentListActivity
 import com.example.cuhubapp.classes.User
 import com.example.cuhubapp.databinding.FragmentProfileBinding
+import com.google.android.gms.auth.api.signin.internal.Storage
+import com.google.firebase.ktx.Firebase
+//import com.google.firebase.storage.FirebaseStorage
+//import com.google.firebase.storage.ktx.storage
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,12 +35,16 @@ class ProfileFragment : Fragment() {
 
     private lateinit var curUser: User
 
+//    private lateinit var firebaseStorage: FirebaseStorage
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
+//        firebaseStorage = Firebase.storage
 
         val bundle = arguments
         curUser = bundle?.getParcelable("user")!!
@@ -45,6 +55,7 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentProfileBinding.inflate(inflater,container,false)
+
         return binding.root
     }
 
@@ -52,14 +63,25 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.cardTimeTable.setOnClickListener {
-            Toast.makeText(view.context, "ok", Toast.LENGTH_SHORT).show()
+            Toast.makeText(view.context, "TimeTable", Toast.LENGTH_SHORT).show()
+
         }
         binding.cardSection.setOnClickListener {
-            Toast.makeText(view.context, "ok12", Toast.LENGTH_SHORT).show()
+            val intent = Intent(view.context, StudentListActivity::class.java).apply {
+                putExtra("showAll", true)
+                putExtra("curUser", curUser)
+            }
+            startActivity(intent)
         }
         binding.cardGroup.setOnClickListener {
-            Toast.makeText(view.context, "ok3", Toast.LENGTH_SHORT).show()
+            val intent = Intent(view.context, StudentListActivity::class.java).apply {
+                putExtra("showAll", false)
+                putExtra("curUser", curUser)
+            }
+            startActivity(intent)
         }
+
+        //TODO Later Faculty list
         binding.cardFaculty.setOnClickListener {
             Toast.makeText(view.context, "ok4", Toast.LENGTH_SHORT).show()
         }
@@ -91,5 +113,9 @@ class ProfileFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    private fun uploadImg(){
+
     }
 }

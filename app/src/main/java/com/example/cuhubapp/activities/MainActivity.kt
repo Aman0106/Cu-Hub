@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
         curUser = intent.getParcelableExtra("user")!!
 
         binding.bottomNavigation.setOnItemSelectedListener{
@@ -72,7 +73,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun getUserList():ArrayList<User>{
         usersInSection = ArrayList()
-        usersInGroup = ArrayList()
         firestoreDb.collection("users")
             .whereEqualTo("course", curUser.course)
             .whereEqualTo("year",curUser.yer)
@@ -81,8 +81,6 @@ class MainActivity : AppCompatActivity() {
                 for (usr in it){
                     val user = setUser(usr)
                     usersInSection += user
-                    if(usr.getString("group") == curUser.group)
-                        usersInGroup += user
                 }
                 replaceFragment(ChatsFragment())
             }
