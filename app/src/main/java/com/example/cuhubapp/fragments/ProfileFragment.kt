@@ -8,11 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.cuhubapp.R
+import com.example.cuhubapp.activities.ImageViewActivity
 import com.example.cuhubapp.activities.StudentListActivity
 import com.example.cuhubapp.classes.User
 import com.example.cuhubapp.databinding.FragmentProfileBinding
 import com.google.android.gms.auth.api.signin.internal.Storage
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
+
 //import com.google.firebase.storage.FirebaseStorage
 //import com.google.firebase.storage.ktx.storage
 
@@ -33,6 +37,9 @@ class ProfileFragment : Fragment() {
 
     private lateinit var binding:FragmentProfileBinding
 
+    private lateinit var firebaseStorage: FirebaseStorage
+//    private lateinit var dbRefrerence: DatabaseR
+
     private lateinit var curUser: User
 
 //    private lateinit var firebaseStorage: FirebaseStorage
@@ -44,7 +51,7 @@ class ProfileFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
 
-//        firebaseStorage = Firebase.storage
+        firebaseStorage = Firebase.storage
 
         val bundle = arguments
         curUser = bundle?.getParcelable("user")!!
@@ -63,8 +70,11 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.cardTimeTable.setOnClickListener {
-            Toast.makeText(view.context, "TimeTable", Toast.LENGTH_SHORT).show()
-
+            val timeTableName:String = curUser.yer.toString() + "_" + curUser.course + "_" + curUser.section.toString() + ".png"
+            val intent = Intent(view.context, ImageViewActivity::class.java).apply {
+                putExtra("image","/time_tables/$timeTableName")
+            }
+            startActivity(intent)
         }
         binding.cardSection.setOnClickListener {
             val intent = Intent(view.context, StudentListActivity::class.java).apply {

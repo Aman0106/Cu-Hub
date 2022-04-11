@@ -5,6 +5,7 @@
       <map>
         <entry key="app/src/main/res/drawable/progressbar_bg.xml" value="0.2295" />
         <entry key="app/src/main/res/layout/activity_chat.xml" value="0.35572916666666665" />
+        <entry key="app/src/main/res/layout/activity_image_view.xml" value="0.31187214611872144" />
         <entry key="app/src/main/res/layout/activity_log_in.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_otp.xml" value="0.3162037037037037" />

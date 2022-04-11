@@ -55,7 +55,8 @@ class LogInActivity : AppCompatActivity() {
                             }
                     }
                     else{
-                        Toast.makeText(this, "invalid", Toast.LENGTH_SHORT).show()
+                        loadingDialog.stopLoading()
+                        Toast.makeText(this, "Error", Toast.LENGTH_LONG).show()
                     }
             }
         }
