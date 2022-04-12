@@ -23,8 +23,9 @@ class UsersNewChatAdapter(private val context: Context, private val userList:Arr
     override fun onBindViewHolder(holder: UsersViewHolder, position: Int) {
         val curUser = userList[position]
         holder.txtName.text = curUser.name
+        holder.firebaseUid = curUser.firebaseUid
         if(curUser.uid?.length!! > 8)
-        holder.txtUid.text = curUser.uid
+            holder.txtUid.text = curUser.uid
     }
 
     override fun getItemCount() = userList.size
@@ -32,13 +33,14 @@ class UsersNewChatAdapter(private val context: Context, private val userList:Arr
     inner class UsersViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
         val txtName = binding.userCardName
         val txtUid = binding.userCardMessage
+        var firebaseUid:String? = null
 
         init {
             itemView.setOnClickListener{
                 val intent = Intent(itemView.context, ChatActivity::class.java).apply {
                     putExtra("name", txtName.text)
+                    putExtra("firebaseUid", firebaseUid)
                 }
-
                 context.startActivity(intent)
             }
         }

@@ -77,8 +77,9 @@ class StudentListActivity : AppCompatActivity() {
         val sec = stu.getLong("section")
         val grp = stu.getString("group")
         val yer = stu.getLong("year")
+        var firebaseUid = stu.getString("firebaseUid")
 
-        return User(uid, name, course, sec, grp, yer)
+        return User(uid, firebaseUid, name, course, sec, grp, yer)
     }
 
 }

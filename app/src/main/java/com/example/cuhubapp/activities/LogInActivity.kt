@@ -28,9 +28,6 @@ class LogInActivity : AppCompatActivity() {
     
     private lateinit var firestore: FirebaseFirestore
     private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var edtUserId: EditText
-    private lateinit var edtPassword: EditText
-    private lateinit var btnSignIn: Button
     private lateinit var binding: ActivityLogInBinding
 
     private val loadingDialog = LoadingDialog(this,"")
@@ -76,9 +73,10 @@ class LogInActivity : AppCompatActivity() {
         val sec = usr.getLong("section")
         val grp = usr.getString("group")
         val yer = usr.getLong("year")
+        val firebaseUid = usr.getString("firebaseUid")
 
         val intent = Intent(this,MainActivity::class.java).apply {
-            putExtra("user", User(usr.id, name, course, sec, grp, yer))
+            putExtra("user", User(usr.id, firebaseUid, name, course, sec, grp, yer))
         }
 
         loadingDialog.stopLoading()
@@ -87,11 +85,8 @@ class LogInActivity : AppCompatActivity() {
     }
 
     private fun signUpText(){
-        var txt = "Not a User? Sign Up"
-        var spannable = SpannableString(txt)
-        // fcs = ForegroundColorSpanRed
-        var fcsRed = ForegroundColorSpan(Color.RED)
-
+        val txt = "Not a User? Sign Up"
+        val spannable = SpannableString(txt)
         val clickableSignUpTxt: ClickableSpan = object : ClickableSpan(){
             override fun onClick(p0: View) {
                 startActivity(Intent(this@LogInActivity, SignUpActivity::class.java))
@@ -103,8 +98,6 @@ class LogInActivity : AppCompatActivity() {
             }
         }
 
-
-//        spannable.setSpan(fcsRed,12, txt.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         spannable.setSpan(clickableSignUpTxt,12, txt.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         binding.txtSignup.text = spannable
         binding.txtSignup.movementMethod = LinkMovementMethod.getInstance()

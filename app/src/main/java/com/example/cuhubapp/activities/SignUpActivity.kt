@@ -48,7 +48,10 @@ class SignUpActivity : AppCompatActivity() {
                         .addOnCompleteListener{ task ->
                             if(task.isSuccessful){
                                 val doc = it.documents[0]
+                                val firebaseUid = HashMap<String,String>()
+                                firebaseUid["firebaseUid"] = firebaseAuth.currentUser!!.uid
                                 doc.reference.update("active", true)
+                                doc.reference.update("firebaseUid",firebaseAuth.currentUser!!.uid)
                                 Toast.makeText(this, "Welcome ${doc.getString("name")}", Toast.LENGTH_SHORT).show()
                                 setUser(doc)
                             }else{
@@ -70,9 +73,10 @@ class SignUpActivity : AppCompatActivity() {
         val sec = usr.getLong("section")
         val grp = usr.getString("group")
         val yer = usr.getLong("year")
+        val firebaseUid = usr.getString("firebaseUid")
 
         val intent = Intent(this,MainActivity::class.java).apply {
-            putExtra("user", User(usr.id, name, course, sec, grp, yer))
+            putExtra("user", User(usr.id, firebaseUid, name, course, sec, grp, yer))
         }
 
         startActivity(intent)

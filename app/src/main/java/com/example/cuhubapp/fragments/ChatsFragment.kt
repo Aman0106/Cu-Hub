@@ -89,18 +89,18 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
     }
 
     private fun setUserCards(view: View){
-        userList = ArrayList()
-        dbUserCollection.get().addOnSuccessListener {
-            for (document in it){
-                if( document.getString("group") == "all"
-                    ||document.getString("group") == curUser.group
-                    && document.id != curUser.uid) {
-                    val user = User(document.getString("name"))
-                    userList += user
-                }
-            }
-            setRecyclerView(view)
-        }
+//        userList = ArrayList()
+//        dbUserCollection.get().addOnSuccessListener {
+//            for (document in it){
+//                if( document.getString("group") == "all"
+//                    ||document.getString("group") == curUser.group
+//                    && document.id != curUser.uid) {
+//                    val user = User(document.getString("name"))
+//                    userList += user
+//                }
+//            }
+//            setRecyclerView(view)
+//        }
     }
 
     private fun setRecyclerView(view: View){

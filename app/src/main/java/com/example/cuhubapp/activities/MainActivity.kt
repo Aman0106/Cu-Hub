@@ -94,7 +94,8 @@ class MainActivity : AppCompatActivity() {
         val sec = usr.getLong("section")
         val grp = usr.getString("group")
         val yer = usr.getLong("year")
+        val firebaseUid = usr.getString("firebaseUid")
 
-        return User(uid, name, course, sec, grp, yer)
+        return User(uid, firebaseUid, name, course, sec, grp, yer)
     }
 }
