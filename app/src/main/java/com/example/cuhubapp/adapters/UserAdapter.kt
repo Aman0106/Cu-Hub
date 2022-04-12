@@ -25,6 +25,7 @@ class UserAdapter(private val context: Context, private val userList: ArrayList<
         val curUser = userList[position]
         holder.txtName.text = curUser.name
         holder.firebaseUid = curUser.firebaseUid
+        holder.active = curUser.active
     }
 
     override fun getItemCount() = userList.size
@@ -35,9 +36,15 @@ class UserAdapter(private val context: Context, private val userList: ArrayList<
         val txtTime:TextView = itemView.findViewById(R.id.user_card_time)
         val imgProfile:ImageView = itemView.findViewById(R.id.user_card_image)
         var firebaseUid:String? = null
+        var active:Boolean? = false
 
         init {
             itemView.setOnClickListener{
+
+                if(active == null){
+                    Toast.makeText(itemView.context, "User has not registered", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
                 val intent = Intent(context, ChatActivity::class.java).apply{
                     putExtra("name",txtName.text.toString())
                     putExtra("firebaseUid",firebaseUid)

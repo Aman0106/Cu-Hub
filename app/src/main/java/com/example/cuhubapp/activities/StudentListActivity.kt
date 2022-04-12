@@ -71,6 +71,7 @@ class StudentListActivity : AppCompatActivity() {
 
     private fun setUser(stu:QueryDocumentSnapshot): User{
 
+        val active = stu.getBoolean("active")
         val uid = stu.id
         val name = stu.getString("name")
         val course = stu.getString("course")
@@ -79,7 +80,7 @@ class StudentListActivity : AppCompatActivity() {
         val yer = stu.getLong("year")
         var firebaseUid = stu.getString("firebaseUid")
 
-        return User(uid, firebaseUid, name, course, sec, grp, yer)
+        return User(active, uid, firebaseUid, name, course, sec, grp, yer)
     }
 
 }

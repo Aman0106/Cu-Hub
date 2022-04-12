@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cuhubapp.activities.ChatActivity
 import com.example.cuhubapp.classes.User
@@ -24,6 +25,7 @@ class UsersNewChatAdapter(private val context: Context, private val userList:Arr
         val curUser = userList[position]
         holder.txtName.text = curUser.name
         holder.firebaseUid = curUser.firebaseUid
+        holder.active = curUser.active
         if(curUser.uid?.length!! > 8)
             holder.txtUid.text = curUser.uid
     }
@@ -34,9 +36,14 @@ class UsersNewChatAdapter(private val context: Context, private val userList:Arr
         val txtName = binding.userCardName
         val txtUid = binding.userCardMessage
         var firebaseUid:String? = null
+        var active:Boolean? = null
 
         init {
             itemView.setOnClickListener{
+                if(active == null){
+                    Toast.makeText(itemView.context, "User has not registered", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
                 val intent = Intent(itemView.context, ChatActivity::class.java).apply {
                     putExtra("name", txtName.text)
                     putExtra("firebaseUid", firebaseUid)

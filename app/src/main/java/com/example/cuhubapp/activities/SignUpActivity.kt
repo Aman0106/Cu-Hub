@@ -68,6 +68,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun setUser(usr:DocumentSnapshot){
+        val active = usr.getBoolean("active")
         val name = usr.getString("name")
         val course = usr.getString("course")
         val sec = usr.getLong("section")
@@ -76,7 +77,7 @@ class SignUpActivity : AppCompatActivity() {
         val firebaseUid = usr.getString("firebaseUid")
 
         val intent = Intent(this,MainActivity::class.java).apply {
-            putExtra("user", User(usr.id, firebaseUid, name, course, sec, grp, yer))
+            putExtra("user", User(active, usr.id, firebaseUid, name, course, sec, grp, yer))
         }
 
         startActivity(intent)

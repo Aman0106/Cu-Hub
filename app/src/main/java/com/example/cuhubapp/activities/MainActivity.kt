@@ -88,6 +88,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUser(usr: QueryDocumentSnapshot): User {
+        val active = usr.getBoolean("active")
         val uid = usr.id
         val name = usr.getString("name")
         val course = usr.getString("course")
@@ -96,6 +97,6 @@ class MainActivity : AppCompatActivity() {
         val yer = usr.getLong("year")
         val firebaseUid = usr.getString("firebaseUid")
 
-        return User(uid, firebaseUid, name, course, sec, grp, yer)
+        return User(active, uid, firebaseUid, name, course, sec, grp, yer)
     }
 }

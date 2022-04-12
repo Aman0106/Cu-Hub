@@ -5,6 +5,7 @@ import android.os.Parcelable
 
 class User: Parcelable  {
 
+    var active:Boolean? = false
     var uid:String? = null
     var firebaseUid:String? = null
     var name:String? = null
@@ -14,6 +15,7 @@ class User: Parcelable  {
     var yer:Long? = null
 
     constructor(parcel: Parcel) : this() {
+        active = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
         uid = parcel.readString()
         firebaseUid = parcel.readString()
         name = parcel.readString()
@@ -26,6 +28,7 @@ class User: Parcelable  {
     constructor(){}
 
     constructor(
+        active: Boolean?,
         uid: String?,
         firebaseUid: String?,
         name: String?,
@@ -34,6 +37,7 @@ class User: Parcelable  {
         group: String?,
         yer:Long?
     ) {
+        this.active = active
         this.uid = uid
         this.firebaseUid = firebaseUid
         this.name = name
@@ -47,6 +51,7 @@ class User: Parcelable  {
         this.name = name
     }
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeValue(active)
         parcel.writeString(uid)
         parcel.writeString(firebaseUid)
         parcel.writeString(name)
