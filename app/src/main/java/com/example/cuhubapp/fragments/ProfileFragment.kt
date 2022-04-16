@@ -2,17 +2,17 @@ package com.example.cuhubapp.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import com.example.cuhubapp.R
 import com.example.cuhubapp.activities.ImageViewActivity
+import com.example.cuhubapp.activities.LogInActivity
 import com.example.cuhubapp.activities.StudentListActivity
 import com.example.cuhubapp.classes.User
 import com.example.cuhubapp.databinding.FragmentProfileBinding
 import com.google.android.gms.auth.api.signin.internal.Storage
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
@@ -38,14 +38,11 @@ class ProfileFragment : Fragment() {
     private lateinit var binding:FragmentProfileBinding
 
     private lateinit var firebaseStorage: FirebaseStorage
-//    private lateinit var dbRefrerence: DatabaseR
-
     private lateinit var curUser: User
-
-//    private lateinit var firebaseStorage: FirebaseStorage
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
@@ -103,6 +100,22 @@ class ProfileFragment : Fragment() {
     private fun setProfile(view: View){
         binding.txtName.text = curUser.name
         binding.txtUid.text = curUser.uid
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.top_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.item_log_out ->{
+                FirebaseAuth.getInstance().signOut()
+                startActivity(Intent(activity,LogInActivity::class.java))
+                activity?.finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     companion object {

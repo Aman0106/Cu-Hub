@@ -9,16 +9,13 @@ import android.text.Spanned
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.text.style.ForegroundColorSpan
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import com.example.cuhubapp.R
 import com.example.cuhubapp.classes.User
 import com.example.cuhubapp.databinding.ActivityLogInBinding
 import com.example.cuhubapp.utils.LoadingDialog
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -53,19 +50,19 @@ class LogInActivity : AppCompatActivity() {
                     }
                     else{
                         loadingDialog.stopLoading()
-                        Toast.makeText(this, task.exception.toString(), Toast.LENGTH_LONG).show()
+                        try {
+                            throw task.exception!!
+                        }catch (e:FirebaseAuthInvalidCredentialsException){
+                            Toast.makeText(this, "Invalid Password", Toast.LENGTH_LONG).show()
+                        }catch (e:FirebaseAuthInvalidUserException){
+                            Toast.makeText(this, "User has not been Registered", Toast.LENGTH_LONG).show()
+                        }
                     }
             }
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        val currentUser = firebaseAuth.currentUser
-        if(currentUser != null){
-            Toast.makeText(this, "Logged in", Toast.LENGTH_SHORT).show()
-        }
-    }
+
 
     private fun setUser(usr: DocumentSnapshot){
         val active = usr.getBoolean("active")
@@ -85,12 +82,13 @@ class LogInActivity : AppCompatActivity() {
 
     }
 
-    private fun signUpText(){
-        val txt = "Not a User? Sign Up"
+    private fun styleSignUpText(){
+        val txt = "Not a User? Register"
         val spannable = SpannableString(txt)
         val clickableSignUpTxt: ClickableSpan = object : ClickableSpan(){
             override fun onClick(p0: View) {
                 startActivity(Intent(this@LogInActivity, SignUpActivity::class.java))
+                finish()
             }
 
             override fun updateDrawState(ds: TextPaint) {
@@ -108,7 +106,7 @@ class LogInActivity : AppCompatActivity() {
         binding = ActivityLogInBinding.inflate(layoutInflater)
         setContentView(binding.root)
         firestore = FirebaseFirestore.getInstance()
-        signUpText()
+        styleSignUpText()
         firebaseAuth = Firebase.auth
         firestore = FirebaseFirestore.getInstance()
     }

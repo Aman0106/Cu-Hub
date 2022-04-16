@@ -113,11 +113,9 @@ class ChatActivity : AppCompatActivity() {
     private fun getUsers(){
         firestore.collection("users").whereEqualTo("firebaseUid", senderUid).get().addOnSuccessListener {
            curUserRef = it.documents[0].reference
-            Toast.makeText(this, "${it.documents[0].id}", Toast.LENGTH_SHORT).show()
         }
         firestore.collection("users").whereEqualTo("firebaseUid", receiverUid).get().addOnSuccessListener {
            otherUserRef = it.documents[0].reference
-//            Toast.makeText(this, "${it.documents[0].id}", Toast.LENGTH_SHORT).show()
         }
     }
 

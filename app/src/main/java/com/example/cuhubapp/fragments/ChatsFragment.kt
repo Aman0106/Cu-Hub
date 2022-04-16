@@ -93,8 +93,6 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
             for(doc in it){
                 val student = firestore.collection("users").document(doc.id)
                 setUser(student)
-//                Toast.makeText(view.context, stu.name, Toast.LENGTH_SHORT).show()
-//                userList += stu
             }
             setRecyclerView(view)
         }
@@ -124,7 +122,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
             if(firebaseUid == curUser.firebaseUid)
                 return@addOnSuccessListener
             userList.add(0,userDoc!!)
-            userAdapter.notifyItemInserted(0)
+            userAdapter.notifyItemInserted(userList.size-1)
             checkIfEmpty()
         }
 
