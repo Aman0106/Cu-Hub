@@ -48,8 +48,7 @@
         android:layout_marginBottom="10dp"
         android:src="@drawable/send2"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="?android:textColorPrimary" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

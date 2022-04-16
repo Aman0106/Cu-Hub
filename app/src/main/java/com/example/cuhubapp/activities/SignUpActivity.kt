@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.example.cuhubapp.R
 import com.example.cuhubapp.classes.User
 import com.example.cuhubapp.databinding.ActivitySignUpBinding
+import com.example.cuhubapp.utils.LoadingDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -22,6 +23,7 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var binding:ActivitySignUpBinding
     private lateinit var firestore: FirebaseFirestore
+    private val loadingDialog = LoadingDialog(this,"Setting things up...")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +35,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun signUp(){
+        loadingDialog.startLoading()
         val usr = firestore.collection("users")
             .whereEqualTo("email", binding.edtUserEmail.text.toString())
 
@@ -40,6 +43,7 @@ class SignUpActivity : AppCompatActivity() {
             .addOnSuccessListener {
                 if(it.isEmpty){
                     Toast.makeText(this, "Your name is not in List", Toast.LENGTH_LONG).show()
+                    loadingDialog.stopLoading()
                     return@addOnSuccessListener
                 }
                 else{
@@ -54,8 +58,9 @@ class SignUpActivity : AppCompatActivity() {
                                 doc.reference.update("firebaseUid",firebaseAuth.currentUser!!.uid)
                                 Toast.makeText(this, "Welcome ${doc.getString("name")}", Toast.LENGTH_SHORT).show()
                                 setUser(doc)
+                                loadingDialog.stopLoading()
                             }else{
-//                    Toast.makeText(this, "Somthing went wrong", Toast.LENGTH_SHORT).show()
+                                loadingDialog.stopLoading()
                                 if(binding.edtPassword.text.length < 6)
                                     Toast.makeText(this, "Password should be at least 6 characters long", Toast.LENGTH_LONG).show()
                                 Log.e(TAG,"Unable to create user", task.exception)

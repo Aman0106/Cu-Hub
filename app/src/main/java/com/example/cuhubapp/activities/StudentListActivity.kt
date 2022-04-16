@@ -36,7 +36,7 @@ class StudentListActivity : AppCompatActivity() {
 
         var showAll = false
         showAll = intent.getBooleanExtra("showAll",showAll)
-        curUser = intent.getParcelableExtra<User>("curUser")!!
+        curUser = intent.getParcelableExtra("curUser")!!
 
         getStudents(showAll)
 
@@ -51,6 +51,8 @@ class StudentListActivity : AppCompatActivity() {
             .get().addOnSuccessListener {
                 for (student in it){
                     val stu = setUser(student)
+                    if(stu.uid == curUser.uid)
+                        continue
                     if(showAll){
                         studentsList += stu
                     }
@@ -64,7 +66,7 @@ class StudentListActivity : AppCompatActivity() {
     private fun setRecyclerView(){
         loadingDialog.stopLoading()
         studentAdapter = UsersNewChatAdapter(this, studentsList)
-        recyclerView = binding.usersRecyclerview
+        recyclerView = binding.recyclerview
         recyclerView.adapter = studentAdapter
         recyclerView.setHasFixedSize(true)
     }
@@ -78,7 +80,7 @@ class StudentListActivity : AppCompatActivity() {
         val sec = stu.getLong("section")
         val grp = stu.getString("group")
         val yer = stu.getLong("year")
-        var firebaseUid = stu.getString("firebaseUid")
+        val firebaseUid = stu.getString("firebaseUid")
 
         return User(active, uid, firebaseUid, name, course, sec, grp, yer)
     }

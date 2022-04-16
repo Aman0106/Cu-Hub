@@ -7,11 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cuhubapp.R
-import com.example.cuhubapp.adapters.UserAdapter
 import com.example.cuhubapp.adapters.UsersNewChatAdapter
 import com.example.cuhubapp.classes.User
 import com.example.cuhubapp.databinding.FragmentNewChatBinding
+import com.example.cuhubapp.utils.LoadingDialog
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QueryDocumentSnapshot
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,10 +30,15 @@ class NewChatFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var binding: FragmentNewChatBinding
+//    private val loadingDialog: LoadingDialog? = activity?.let { LoadingDialog(it,"Fetching List") }
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var userAdapter: UsersNewChatAdapter
-    private lateinit var usersList: ArrayList<User>
+
+    private lateinit var studentsList: ArrayList<User>
+    private lateinit var curUser:User
+
+    private lateinit var firestoreDatabase:FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,25 +46,20 @@ class NewChatFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-        usersList = ArrayList()
-        val bundle = arguments
-        usersList = bundle?.getParcelableArrayList("usersInSection")!!
-        usersList = bundle?.getParcelableArrayList("usersInSection")!!
-
-
+        initializeValues()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentNewChatBinding.inflate(inflater,container,false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setRecyclerView(view)
+        getStudents(view)
     }
 
     companion object {
@@ -81,10 +82,52 @@ class NewChatFragment : Fragment() {
             }
     }
 
+    private fun getStudents(view: View){
+        studentsList = ArrayList()
+        firestoreDatabase.collection("users")
+            .whereEqualTo("course",curUser.course)
+            .whereEqualTo("year", curUser.yer)
+            .whereEqualTo("section", curUser.section)
+            .whereEqualTo("active",true)
+            .get().addOnSuccessListener {
+                for (student in it){
+                    val stu = setUser(student)
+                    if(stu.uid != curUser.uid)
+                        studentsList.add(stu)
+//                    loadingDialog?.stopLoading()
+                }
+                setRecyclerView(view)
+            }.addOnFailureListener {
+                Toast.makeText(view.context, "Unknown Error", Toast.LENGTH_SHORT).show()
+//                loadingDialog?.stopLoading()
+            }
+
+    }
+
+    private fun setUser(stu: QueryDocumentSnapshot): User{
+
+        val active = stu.getBoolean("active")
+        val uid = stu.id
+        val name = stu.getString("name")
+        val course = stu.getString("course")
+        val sec = stu.getLong("section")
+        val grp = stu.getString("group")
+        val yer = stu.getLong("year")
+        val firebaseUid = stu.getString("firebaseUid")
+        return User(active, uid, firebaseUid, name, course, sec, grp, yer)
+    }
+
     private fun setRecyclerView(view: View){
-        userAdapter = UsersNewChatAdapter(view.context,usersList)
-        recyclerView = binding.usersRecyclerview
+        userAdapter = UsersNewChatAdapter(view.context,studentsList)
+        recyclerView = binding.recyclerview
         recyclerView.adapter = userAdapter
         recyclerView.setHasFixedSize(true)
+    }
+
+    private fun initializeValues(){
+        val bundle = arguments
+        firestoreDatabase = FirebaseFirestore.getInstance()
+        curUser = bundle?.getParcelable("user")!!
+//        loadingDialog?.startLoading()
     }
 }

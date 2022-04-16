@@ -93,7 +93,7 @@ class ProfileFragment : Fragment() {
 
         //TODO Later Faculty list
         binding.cardFaculty.setOnClickListener {
-            Toast.makeText(view.context, "ok4", Toast.LENGTH_SHORT).show()
+            Toast.makeText(view.context, "No Faculty list", Toast.LENGTH_SHORT).show()
         }
 
         

@@ -53,7 +53,7 @@ class LogInActivity : AppCompatActivity() {
                     }
                     else{
                         loadingDialog.stopLoading()
-                        Toast.makeText(this, "Error", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, task.exception.toString(), Toast.LENGTH_LONG).show()
                     }
             }
         }

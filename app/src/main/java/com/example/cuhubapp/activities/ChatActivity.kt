@@ -11,6 +11,8 @@ import com.example.cuhubapp.classes.Message
 import com.example.cuhubapp.databinding.ActivityChatBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -23,12 +25,15 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var receiverUid:String
     private var senderRoom:String? = null
     private var receiverRoom:String? = null
+    private lateinit var curUserRef: DocumentReference
+    private lateinit var otherUserRef: DocumentReference
 
     private lateinit var messageList:ArrayList<Message>
     private lateinit var messageAdapter: MessageAdapter
     private lateinit var recyclerView: RecyclerView
 
     private lateinit var rtDatabase:DatabaseReference
+    private lateinit var firestore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +67,11 @@ class ChatActivity : AppCompatActivity() {
             .setValue(message).addOnSuccessListener {
                 rtDatabase.child("chats").child(receiverRoom!!).child("messages").child(randomKey).setValue(message)
                 binding.textBox.setText("")
+                val chat = HashMap<String,Boolean>()
+                chat["chat"] = true
+                curUserRef.collection("chats").document(otherUserRef.id).set(chat)
+                otherUserRef.collection("chats").document(curUserRef.id).set(chat)
+
             }
             .addOnFailureListener{
                 Toast.makeText(this, "$it", Toast.LENGTH_LONG).show()
@@ -100,14 +110,27 @@ class ChatActivity : AppCompatActivity() {
             })
     }
 
+    private fun getUsers(){
+        firestore.collection("users").whereEqualTo("firebaseUid", senderUid).get().addOnSuccessListener {
+           curUserRef = it.documents[0].reference
+            Toast.makeText(this, "${it.documents[0].id}", Toast.LENGTH_SHORT).show()
+        }
+        firestore.collection("users").whereEqualTo("firebaseUid", receiverUid).get().addOnSuccessListener {
+           otherUserRef = it.documents[0].reference
+//            Toast.makeText(this, "${it.documents[0].id}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun initializeValues(){
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.title = intent.getStringExtra("name")
 
         rtDatabase = FirebaseDatabase.getInstance().reference
+        firestore = FirebaseFirestore.getInstance()
         recyclerView = binding.recyclerView
 
         configChat()
+        getUsers()
     }
 }

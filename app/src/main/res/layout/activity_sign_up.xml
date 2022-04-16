@@ -21,8 +21,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="40dp"
-        android:hint="Email"
-        android:maxLength="25"
+        android:hint="uic.19bca1000@gmail.com"
+        android:maxLength="23"
         android:paddingHorizontal="5dp" />
 
     <EditText
