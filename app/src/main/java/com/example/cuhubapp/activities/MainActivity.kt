@@ -7,17 +7,15 @@ import androidx.fragment.app.Fragment
 import com.example.cuhubapp.R
 import com.example.cuhubapp.classes.User
 import com.example.cuhubapp.databinding.ActivityMainBinding
-import com.example.cuhubapp.fragments.ChatsFragment
-import com.example.cuhubapp.fragments.NewChatFragment
-import com.example.cuhubapp.fragments.ProfileFragment
-import com.example.cuhubapp.fragments.SyllabusFragment
+import com.example.cuhubapp.fragments.*
+import com.example.cuhubapp.utils.StringParser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var firestoreDb:FirebaseFirestore
+    private lateinit var firestore:FirebaseFirestore
 
     private lateinit var usersInSection:ArrayList<User>
     private lateinit var usersInGroup:ArrayList<User>
@@ -27,13 +25,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        firestoreDb = FirebaseFirestore.getInstance()
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        initializeValues()
 
-        curUser = intent.getParcelableExtra("user")!!
-
+        Toast.makeText(this, "Welcome ${curUser.name}", Toast.LENGTH_SHORT).show()
+        
         binding.bottomNavigation.setOnItemSelectedListener{
 
             when(it.itemId){
@@ -41,7 +36,7 @@ class MainActivity : AppCompatActivity() {
                     replaceFragment(ChatsFragment())
                 }
                 R.id.menu_new_chat-> {
-                    replaceFragment(NewChatFragment())
+                    replaceFragment(LoginFacultyFragment())
                 }
                 R.id.menu_syllabus-> {
                     replaceFragment(SyllabusFragment())
@@ -73,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun getUserList():ArrayList<User>{
         usersInSection = ArrayList()
-        firestoreDb.collection("users")
+        firestore.collection("users")
             .whereEqualTo("course", curUser.course)
             .whereEqualTo("year",curUser.yer)
             .whereEqualTo("section",curUser.section)
@@ -98,5 +93,17 @@ class MainActivity : AppCompatActivity() {
         val firebaseUid = usr.getString("firebaseUid")
 
         return User(active, uid, firebaseUid, name, course, sec, grp, yer)
+    }
+
+    private fun initializeValues() {
+        firestore = FirebaseFirestore.getInstance()
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
+        curUser = User()
+
+        curUser = intent.getParcelableExtra("user")!!
+
     }
 }

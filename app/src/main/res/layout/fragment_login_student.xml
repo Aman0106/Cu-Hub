@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.LoginStudentFragment">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="1dp"
+            android:background="?android:textColorPrimary"
+            android:elevation="2dp"/>
+
+        <EditText
+            android:id="@+id/edt_user_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="80dp"
+            android:hint="uic.19bca1000@gmail.com"
+            android:maxLength="23"
+            android:paddingHorizontal="5dp" />
+
+        <EditText
+            android:id="@+id/edt_user_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edt_user_email"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="12dp"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:paddingHorizontal="5dp" />
+
+        <Button
+            android:id="@+id/btn_sign_in"
+            android:layout_width="138dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edt_user_password"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:text="Sign in"
+            android:textColor="@color/white"
+            android:textSize="23sp" />
+
+        <TextView
+            android:id="@+id/txt_signup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btn_sign_in"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="28dp"
+            android:text="Not a User? Sign Up"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+</FrameLayout>

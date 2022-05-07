@@ -9,6 +9,7 @@ import com.example.cuhubapp.R
 import com.example.cuhubapp.adapters.MessageAdapter
 import com.example.cuhubapp.classes.Message
 import com.example.cuhubapp.databinding.ActivityChatBinding
+import com.example.cuhubapp.utils.StringParser
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.DocumentReference
@@ -41,14 +42,15 @@ class ChatActivity : AppCompatActivity() {
         initializeValues()
 
         binding.imgSend.setOnClickListener {
-            sendMessage()
+            if(!binding.textBox.text.isEmpty())
+                sendMessage()
         }
         updateAdapter()
     }
 
 
     private fun sendMessage(){
-        val msgText = binding.textBox.text.toString()
+        val msgText = StringParser().removeSpaceFromEnd(binding.textBox.text.toString())
         val date = Date()
         val message = Message(msgText,senderUid, date.time.toString())
 
@@ -101,7 +103,8 @@ class ChatActivity : AppCompatActivity() {
                     messageList.clear()
                     for(postSnapshot in snapshot.children){
                         val message = postSnapshot.getValue(Message::class.java)
-                        messageList.add(message!!)
+                        message?.message = StringParser().removeSpaceFromEnd(message?.message!!)
+                        messageList.add(message)
                     }
                     messageAdapter.notifyDataSetChanged()
                 }

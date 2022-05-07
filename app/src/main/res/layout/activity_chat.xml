@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ChatActivity"
-    android:background="@drawable/chat_background_ice">
+    tools:context=".activities.ChatActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view_chat"
@@ -42,11 +41,13 @@
 
     <ImageView
         android:id="@+id/img_send"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="10dp"
-        android:src="@drawable/send2"
+        android:src="@drawable/send_small_icon"
+        app:tint="@color/white"
+        android:background="@drawable/circular_button_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

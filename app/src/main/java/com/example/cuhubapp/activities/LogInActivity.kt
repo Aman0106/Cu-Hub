@@ -1,23 +1,15 @@
 package com.example.cuhubapp.activities
 
-import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.TextPaint
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
-import android.view.View
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.example.cuhubapp.R
-import com.example.cuhubapp.classes.User
 import com.example.cuhubapp.databinding.ActivityLogInBinding
+import com.example.cuhubapp.fragments.LoginFacultyFragment
+import com.example.cuhubapp.fragments.LoginStudentFragment
 import com.example.cuhubapp.utils.LoadingDialog
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
@@ -35,80 +27,85 @@ class LogInActivity : AppCompatActivity() {
         supportActionBar?.hide()
         initializeValues()
 
-        binding.btnSignIn.setOnClickListener {
-            loadingDialog.startLoading()
-            firebaseAuth.signInWithEmailAndPassword(binding.edtUserEmail.text.toString(),
-                binding.edtUserPassword.text.toString())
-                .addOnCompleteListener{ task -> 
-                    if(task.isSuccessful) {
-                        val doc = firestore.collection("users")
-                            .whereEqualTo("email", binding.edtUserEmail.text.toString())
-                        doc.get()
-                            .addOnSuccessListener {
-                                setUser(it.documents[0])
-                            }
-                    }
-                    else{
-                        loadingDialog.stopLoading()
-                        try {
-                            throw task.exception!!
-                        }catch (e:FirebaseAuthInvalidCredentialsException){
-                            Toast.makeText(this, "Invalid Password", Toast.LENGTH_LONG).show()
-                        }catch (e:FirebaseAuthInvalidUserException){
-                            Toast.makeText(this, "User has not been Registered", Toast.LENGTH_LONG).show()
-                        }
-                    }
+        binding.navigationBar.setOnItemSelectedListener{
+            when(it.itemId){
+                R.id.item_faculty_mode->{
+                    replaceFragment(LoginFacultyFragment())
+                }
+                R.id.item_student_mode->{
+                    replaceFragment(LoginStudentFragment())
+                }
             }
+
+            return@setOnItemSelectedListener true
         }
+
     }
 
 
 
-    private fun setUser(usr: DocumentSnapshot){
-        val active = usr.getBoolean("active")
-        val name = usr.getString("name")
-        val course = usr.getString("course")
-        val sec = usr.getLong("section")
-        val grp = usr.getString("group")
-        val yer = usr.getLong("year")
-        val firebaseUid = usr.getString("firebaseUid")
+//    private fun setUser(usr: DocumentSnapshot){
+//        val active = usr.getBoolean("active")
+//        val name = usr.getString("name")
+//        val course = usr.getString("course")
+//        val sec = usr.getLong("section")
+//        val grp = usr.getString("group")
+//        val yer = usr.getLong("year")
+//        val firebaseUid = usr.getString("firebaseUid")
+//
+//        val intent = Intent(this,MainActivity::class.java).apply {
+//            putExtra("user", User(active, usr.id, firebaseUid, name, course, sec, grp, yer))
+//        }
+//
+//        loadingDialog.stopLoading()
+//        startActivity(intent)
+//        finish()
+//    }
 
-        val intent = Intent(this,MainActivity::class.java).apply {
-            putExtra("user", User(active, usr.id, firebaseUid, name, course, sec, grp, yer))
-        }
-
-        loadingDialog.stopLoading()
-        startActivity(intent)
-
-    }
-
-    private fun styleSignUpText(){
-        val txt = "Not a User? Register"
-        val spannable = SpannableString(txt)
-        val clickableSignUpTxt: ClickableSpan = object : ClickableSpan(){
-            override fun onClick(p0: View) {
-                startActivity(Intent(this@LogInActivity, SignUpActivity::class.java))
-                finish()
-            }
-
-            override fun updateDrawState(ds: TextPaint) {
-                super.updateDrawState(ds)
-                ds.color = Color.RED
-            }
-        }
-
-        spannable.setSpan(clickableSignUpTxt,12, txt.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        binding.txtSignup.text = spannable
-        binding.txtSignup.movementMethod = LinkMovementMethod.getInstance()
-    }
+//    private fun styleSignUpText(){
+//        val txt = "Not a User? Register"
+//        val spannable = SpannableString(txt)
+//        val clickableSignUpTxt: ClickableSpan = object : ClickableSpan(){
+//            override fun onClick(p0: View) {
+//                startActivity(Intent(this@LogInActivity, SignUpActivity::class.java))
+//                finish()
+//            }
+//
+//            override fun updateDrawState(ds: TextPaint) {
+//                super.updateDrawState(ds)
+//                ds.color = Color.RED
+//            }
+//        }
+//
+//        spannable.setSpan(clickableSignUpTxt,12, txt.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+//        binding.txtSignup.text = spannable
+//        binding.txtSignup.movementMethod = LinkMovementMethod.getInstance()
+//    }
 
     private fun initializeValues(){
         binding = ActivityLogInBinding.inflate(layoutInflater)
         setContentView(binding.root)
         firestore = FirebaseFirestore.getInstance()
-        styleSignUpText()
+//        styleSignUpText()
         firebaseAuth = Firebase.auth
         firestore = FirebaseFirestore.getInstance()
+
+        replaceFragment(LoginStudentFragment())
+    }
+
+    private fun replaceFragment(fragment: Fragment){
+
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+
+//        val bundle = Bundle()
+//        bundle.putParcelable("user", curUser)
+//        bundle.putParcelableArrayList("usersInSection",usersInSection)
+//        fragment.arguments = bundle
+
+        fragmentTransaction.replace(R.id.frame_layout, fragment)
+        fragmentTransaction.commit()
+
     }
 
 }
