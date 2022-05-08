@@ -14,11 +14,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.cuhubapp.R
+import com.example.cuhubapp.activities.FacultyMainActivity
+import com.example.cuhubapp.activities.LogInActivity
 import com.example.cuhubapp.activities.MainActivity
 import com.example.cuhubapp.activities.SignUpActivity
+import com.example.cuhubapp.classes.FacultyUser
 import com.example.cuhubapp.classes.User
 import com.example.cuhubapp.databinding.FragmentLoginFacultyBinding
 import com.example.cuhubapp.databinding.FragmentLoginStudentBinding
+import com.example.cuhubapp.utils.LoadingDialog
 import com.example.cuhubapp.utils.StringParser
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -33,7 +37,7 @@ class LoginFacultyFragment : Fragment() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var binding: FragmentLoginFacultyBinding
 
-//    private val loadingDialog = LoadingDialog(requireActivity().parent,"")
+    private lateinit var loadingDialog: LoadingDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,13 +53,14 @@ class LoginFacultyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initializeValues()
+        loadingDialog = LoadingDialog(activity as LogInActivity, "")
         binding.btnSignIn.setOnClickListener {
             signIn()
         }
     }
 
     private fun signIn() {
-//        loadingDialog.startLoading()
+        loadingDialog.startLoading()
         val email = StringParser().toLowerCase(binding.edtUserEmail.text.toString())
         firebaseAuth.signInWithEmailAndPassword(
             email,
@@ -67,10 +72,10 @@ class LoginFacultyFragment : Fragment() {
                         .whereEqualTo("email", binding.edtUserEmail.text.toString())
                     doc.get()
                         .addOnSuccessListener {
-                            setUser(it.documents[0])
+                            setFacultyUser(it.documents[0])
                         }
                 } else {
-//                    loadingDialog.stopLoading()
+                    loadingDialog.stopLoading()
                     try {
                         throw task.exception!!
                     } catch (e: FirebaseAuthInvalidCredentialsException) {
@@ -83,22 +88,17 @@ class LoginFacultyFragment : Fragment() {
             }
     }
 
-    private fun setUser(usr: DocumentSnapshot){
+    private fun setFacultyUser(usr:DocumentSnapshot){
         val active = usr.getBoolean("active")
         val name = usr.getString("name")
-        val course = usr.getString("course")
-        val sec = usr.getLong("section")
-        val grp = usr.getString("group")
-        val yer = usr.getLong("year")
         val firebaseUid = usr.getString("firebaseUid")
 
-        val intent = Intent(activity, MainActivity::class.java).apply {
-//            putExtra("user", User(active, usr.id, firebaseUid, name, course, sec, grp, yer))
+        val intent = Intent(activity, FacultyMainActivity::class.java).apply {
+            putExtra("facultyuser", FacultyUser(active,usr.id, name, firebaseUid))
         }
 
-//        loadingDialog.stopLoading()
         startActivity(intent)
-        requireActivity().finish()
+        activity?.finish()
     }
 
     private fun styleSignUpText(){

@@ -13,6 +13,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.cuhubapp.R
+import com.example.cuhubapp.classes.FacultyUser
 import com.example.cuhubapp.classes.User
 import com.example.cuhubapp.databinding.ActivitySignUpBinding
 import com.example.cuhubapp.fragments.RegisterFacultyFragment
@@ -38,25 +39,23 @@ class SignUpActivity : AppCompatActivity() {
         super.onStart()
         val currentUser = firebaseAuth.currentUser
         if(currentUser != null){
+            firebaseAuth.signOut()
             loadingDialog.startLoading()
             firestore.collection("user").whereEqualTo("firebaseUid",firebaseAuth.currentUser?.uid)
-                .get().addOnSuccessListener {
-                    if(it.isEmpty) {
+                .get().addOnCompleteListener {
+                    if(!it.result.isEmpty) {
                         loadingDialog.stopLoading()
-                        firebaseAuth.signOut()
-                        return@addOnSuccessListener
+                        setUser(it.result.documents[0])
+                        loadingDialog.stopLoading()
+                        return@addOnCompleteListener
                     }
-                    loadingDialog.stopLoading()
-                    setUser(it.documents[0])
-                }
-                .addOnFailureListener {
                     firestore.collection("faculty").whereEqualTo("firebaseUid",firebaseAuth.currentUser?.uid)
                         .get().addOnSuccessListener {doc ->
                             loadingDialog.stopLoading()
-                            setUser(doc.documents[0])
+                            setFacultyUser(doc.documents[0])
                         }
-                        .addOnFailureListener {
-                            Toast.makeText(this, "${it.message}", Toast.LENGTH_SHORT).show()
+                        .addOnFailureListener {exc->
+                            Toast.makeText(this, "${exc.message}", Toast.LENGTH_SHORT).show()
                         }
                 }
         }
@@ -79,7 +78,6 @@ class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeValues()
-
     }
 
 
@@ -102,7 +100,15 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun setFacultyUser(usr:DocumentSnapshot){
         val active = usr.getBoolean("active")
+        val name = usr.getString("name")
+        val firebaseUid = usr.getString("firebaseUid")
 
+        val intent = Intent(this,FacultyMainActivity::class.java).apply {
+            putExtra("facultyuser", FacultyUser(active,usr.id, name, firebaseUid))
+        }
+
+        startActivity(intent)
+        finish()
     }
 
     private fun replaceFragment(fragment: Fragment){

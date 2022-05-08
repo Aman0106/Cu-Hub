@@ -63,7 +63,7 @@ class LoginStudentFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        loadingDialog = LoadingDialog(activity as LogInActivity,"ms")
+        loadingDialog = LoadingDialog(activity as LogInActivity,"Loging in")
         binding = FragmentLoginStudentBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -88,6 +88,11 @@ class LoginStudentFragment : Fragment() {
                         .whereEqualTo("email", binding.edtUserEmail.text.toString())
                     doc.get()
                         .addOnSuccessListener {
+                            if(it.isEmpty){
+                                Toast.makeText(activity, "Invalid credentials", Toast.LENGTH_SHORT).show()
+                                loadingDialog.stopLoading()
+                                return@addOnSuccessListener
+                            }
                             setUser(it.documents[0])
                         }
                 } else {

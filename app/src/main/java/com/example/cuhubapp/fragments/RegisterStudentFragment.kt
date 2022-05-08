@@ -16,9 +16,11 @@ import android.widget.Toast
 import com.example.cuhubapp.R
 import com.example.cuhubapp.activities.LogInActivity
 import com.example.cuhubapp.activities.MainActivity
+import com.example.cuhubapp.activities.SignUpActivity
 import com.example.cuhubapp.classes.User
 import com.example.cuhubapp.databinding.ActivitySignUpBinding
 import com.example.cuhubapp.databinding.FragmentRegisterStudentBinding
+import com.example.cuhubapp.utils.LoadingDialog
 import com.example.cuhubapp.utils.StringParser
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
@@ -34,6 +36,8 @@ class RegisterStudentFragment : Fragment() {
     private lateinit var binding:FragmentRegisterStudentBinding
     private lateinit var firestore: FirebaseFirestore
 
+    private lateinit var loadingDialog: LoadingDialog
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,13 +50,14 @@ class RegisterStudentFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeValues()
+        loadingDialog = LoadingDialog(activity as SignUpActivity,"")
         binding.btnSignIn.setOnClickListener {
             signUp()
         }
     }
 
     private fun signUp() {
-//        loadingDialog.startLoading()
+        loadingDialog.startLoading()
         val email = StringParser().toLowerCase(binding.edtUserEmail.text.toString())
         val usr = firestore.collection("users")
             .whereEqualTo("email", email)
@@ -61,7 +66,7 @@ class RegisterStudentFragment : Fragment() {
             .addOnSuccessListener {
                 if (it.isEmpty) {
                     Toast.makeText(activity, "Your name is not in List", Toast.LENGTH_LONG).show()
-//                    loadingDialog.stopLoading()
+                    loadingDialog.stopLoading()
                     return@addOnSuccessListener
                 } else {
                     firebaseAuth.createUserWithEmailAndPassword(
@@ -81,9 +86,9 @@ class RegisterStudentFragment : Fragment() {
                                     Toast.LENGTH_SHORT
                                 ).show()
                                 setUser(doc)
-//                                loadingDialog.stopLoading()
+                                loadingDialog.stopLoading()
                             } else {
-//                                loadingDialog.stopLoading()
+                                loadingDialog.stopLoading()
                                 try {
                                     throw task.exception!!
                                 } catch (e: FirebaseAuthWeakPasswordException) {

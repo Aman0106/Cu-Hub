@@ -14,9 +14,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.cuhubapp.R
+import com.example.cuhubapp.activities.FacultyMainActivity
 import com.example.cuhubapp.activities.LogInActivity
 import com.example.cuhubapp.activities.MainActivity
 import com.example.cuhubapp.activities.SignUpActivity
+import com.example.cuhubapp.classes.FacultyUser
 import com.example.cuhubapp.classes.User
 import com.example.cuhubapp.databinding.FragmentRegisterFacultyBinding
 import com.example.cuhubapp.databinding.FragmentRegisterStudentBinding
@@ -34,7 +36,7 @@ class RegisterFacultyFragment : Fragment() {
     private lateinit var binding: FragmentRegisterFacultyBinding
     private lateinit var firestore: FirebaseFirestore
 
-//    private var loadingDialog = LoadingDialog(requireActivity() as SignUpActivity,"")
+    private lateinit var loadingDialog:LoadingDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,14 +50,14 @@ class RegisterFacultyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeValues()
-//        loadingDialog = LoadingDialog(activity as SignUpActivity,"")
+        loadingDialog = LoadingDialog(activity as SignUpActivity,"")
         binding.btnSignIn.setOnClickListener {
             signUp()
         }
     }
 
     private fun signUp() {
-//        loadingDialog.startLoading()
+        loadingDialog.startLoading()
         val email = StringParser().toLowerCase(binding.edtUserEmail.text.toString())
         val usr = firestore.collection("faculty")
             .whereEqualTo("email", email)
@@ -64,7 +66,7 @@ class RegisterFacultyFragment : Fragment() {
             .addOnSuccessListener {
                 if (it.isEmpty) {
                     Toast.makeText(activity, "Your name is not in List", Toast.LENGTH_LONG).show()
-//                    loadingDialog.stopLoading()
+                    loadingDialog.stopLoading()
                     return@addOnSuccessListener
                 } else {
                     firebaseAuth.createUserWithEmailAndPassword(
@@ -83,10 +85,10 @@ class RegisterFacultyFragment : Fragment() {
                                     "Welcome ${doc.getString("name")}",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                setUser(doc)
-//                                loadingDialog.stopLoading()
+                                setFacultyUser(doc)
+                                loadingDialog.stopLoading()
                             } else {
-//                                loadingDialog.stopLoading()
+                                loadingDialog.stopLoading()
                                 try {
                                     throw task.exception!!
                                 } catch (e: FirebaseAuthWeakPasswordException) {
@@ -107,21 +109,17 @@ class RegisterFacultyFragment : Fragment() {
             }
     }
 
-    private fun setUser(usr: DocumentSnapshot){
+    private fun setFacultyUser(usr:DocumentSnapshot){
         val active = usr.getBoolean("active")
         val name = usr.getString("name")
-        val course = usr.getString("course")
-        val sec = usr.getLong("section")
-        val grp = usr.getString("group")
-        val yer = usr.getLong("year")
         val firebaseUid = usr.getString("firebaseUid")
 
-        val intent = Intent(activity, MainActivity::class.java).apply {
-//            putExtra("user", User(active, usr.id, firebaseUid, name, course, sec, grp, yer))
+        val intent = Intent(activity, FacultyMainActivity::class.java).apply {
+            putExtra("facultyuser", FacultyUser(active,usr.id, name, firebaseUid))
         }
 
         startActivity(intent)
-
+        activity?.finish()
     }
 
     private fun styleSignInText(){
