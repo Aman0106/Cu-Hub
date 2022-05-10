@@ -14,10 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.cuhubapp.R
-import com.example.cuhubapp.activities.FacultyMainActivity
-import com.example.cuhubapp.activities.LogInActivity
-import com.example.cuhubapp.activities.MainActivity
-import com.example.cuhubapp.activities.SignUpActivity
+import com.example.cuhubapp.activities.*
 import com.example.cuhubapp.classes.FacultyUser
 import com.example.cuhubapp.classes.User
 import com.example.cuhubapp.databinding.FragmentLoginFacultyBinding
@@ -92,9 +89,11 @@ class LoginFacultyFragment : Fragment() {
         val active = usr.getBoolean("active")
         val name = usr.getString("name")
         val firebaseUid = usr.getString("firebaseUid")
+        val path = usr.reference.path
 
         val intent = Intent(activity, FacultyMainActivity::class.java).apply {
-            putExtra("facultyuser", FacultyUser(active,usr.id, name, firebaseUid))
+            putExtra("facultyUser", FacultyUser(active,usr.id, name, firebaseUid, path))
+            putExtra("userType", UserType.FACULTY)
         }
 
         startActivity(intent)

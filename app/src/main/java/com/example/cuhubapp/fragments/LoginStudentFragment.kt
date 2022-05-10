@@ -17,6 +17,7 @@ import com.example.cuhubapp.R
 import com.example.cuhubapp.activities.LogInActivity
 import com.example.cuhubapp.activities.MainActivity
 import com.example.cuhubapp.activities.SignUpActivity
+import com.example.cuhubapp.activities.UserType
 import com.example.cuhubapp.classes.User
 import com.example.cuhubapp.databinding.ActivityLogInBinding
 import com.example.cuhubapp.databinding.FragmentLoginStudentBinding
@@ -117,14 +118,16 @@ class LoginStudentFragment : Fragment() {
         val grp = usr.getString("group")
         val yer = usr.getLong("year")
         val firebaseUid = usr.getString("firebaseUid")
+        val path = usr.reference.path
 
         val intent = Intent(activity, MainActivity::class.java).apply {
-            putExtra("user", User(active, usr.id, firebaseUid, name, course, sec, grp, yer))
+            putExtra("user", User(active, usr.id, firebaseUid, name, course, sec, grp, yer, path))
+            putExtra("userType", UserType.STUDENT)
         }
 
         loadingDialog.stopLoading()
         startActivity(intent)
-        requireActivity().finish()
+        activity?.finish()
     }
 
     private fun styleSignUpText(){

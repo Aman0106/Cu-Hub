@@ -2,6 +2,7 @@ package com.example.cuhubapp.classes
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.google.firebase.firestore.DocumentReference
 
 class User: Parcelable  {
 
@@ -13,6 +14,7 @@ class User: Parcelable  {
     var section:Long? = null
     var group:String? = null
     var yer:Long? = null
+    var path:String? = null
 
     constructor(parcel: Parcel) : this() {
         active = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
@@ -23,6 +25,7 @@ class User: Parcelable  {
         section = parcel.readLong()
         group = parcel.readString()
         yer = parcel.readLong()
+        path = parcel.readString()
     }
 
     constructor(){}
@@ -35,7 +38,8 @@ class User: Parcelable  {
         course: String?,
         section: Long?,
         group: String?,
-        yer:Long?
+        yer:Long?,
+        path:String?
     ) {
         this.active = active
         this.uid = uid
@@ -45,6 +49,7 @@ class User: Parcelable  {
         this.section = section
         this.group = group
         this.yer = yer
+        this.path = path
     }
 
     constructor(name: String?) {
@@ -59,6 +64,7 @@ class User: Parcelable  {
         parcel.writeLong(section!!)
         parcel.writeString(group)
         parcel.writeLong(yer!!)
+        parcel.writeString(path)
     }
 
     override fun describeContents(): Int {

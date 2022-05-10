@@ -8,36 +8,40 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cuhubapp.activities.ChatActivity
-import com.example.cuhubapp.classes.User
+import com.example.cuhubapp.classes.FacultyUser
+import com.example.cuhubapp.databinding.FacultyUserCardBinding
 import com.example.cuhubapp.databinding.UserCardBinding
+import com.google.firebase.firestore.DocumentReference
 
-class UsersNewChatAdapter(private val context: Context,
-                          private val userList:ArrayList<User>,
-                          private val sender:String?):RecyclerView.Adapter<UsersNewChatAdapter.UsersViewHolder>(){
+class FacultyListAdapter(private val context: Context,
+                         private val facultyList:ArrayList<FacultyUser>,
+                         private val sender:String?):RecyclerView.Adapter<FacultyListAdapter.UsersViewHolder>() {
 
-    private lateinit var binding: UserCardBinding
+    private lateinit var binding: FacultyUserCardBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersViewHolder {
-        binding = UserCardBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        binding = FacultyUserCardBinding.inflate(LayoutInflater.from(parent.context),parent,false)
 
         return UsersViewHolder(binding.root)
     }
 
     override fun onBindViewHolder(holder: UsersViewHolder, position: Int) {
-        val curUser = userList[position]
+        val curUser = facultyList[position]
         holder.txtName.text = curUser.name
         holder.firebaseUid = curUser.firebaseUid
         holder.active = curUser.active
         holder.receiver = curUser.path
+//        holder.txtSubject = curUser
         if(curUser.uid?.length!! > 8)
             holder.txtUid.text = curUser.uid
     }
 
-    override fun getItemCount() = userList.size
+    override fun getItemCount() = facultyList.size
 
-    inner class UsersViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
+    inner class UsersViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val txtName = binding.userCardName
         val txtUid = binding.userCardMessage
+        val txtSubject = binding.facultyCardSubject
         var firebaseUid:String? = null
         var active:Boolean? = null
         var receiver:String? = null
@@ -51,8 +55,8 @@ class UsersNewChatAdapter(private val context: Context,
                 val intent = Intent(itemView.context, ChatActivity::class.java).apply {
                     putExtra("name", txtName.text)
                     putExtra("firebaseUid", firebaseUid)
-                    putExtra("sender", sender)
-                    putExtra("receiver", receiver)
+                    putExtra("sender",sender)
+                    putExtra("receiver",receiver)
                 }
                 context.startActivity(intent)
             }

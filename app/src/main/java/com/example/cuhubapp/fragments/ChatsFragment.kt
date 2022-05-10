@@ -8,14 +8,20 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cuhubapp.R
+import com.example.cuhubapp.activities.UserType
 import com.example.cuhubapp.adapters.UserAdapter
 import com.example.cuhubapp.adapters.UsersNewChatAdapter
+import com.example.cuhubapp.classes.FacultyUser
 import com.example.cuhubapp.classes.User
 import com.example.cuhubapp.databinding.FragmentChatsBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+
 class ChatsFragment : Fragment(R.layout.fragment_chats) {
 
     private lateinit var recyclerView:RecyclerView
@@ -24,13 +30,14 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
 
     private lateinit var binding: FragmentChatsBinding
     private lateinit var firestore: FirebaseFirestore
-    private lateinit var dbUserCollection:CollectionReference
 
     private lateinit var curUser: User
-    private lateinit var chatUsersList:  ArrayList<User>
+    private lateinit var curFacultyUser: FacultyUser
+    private lateinit var userType: UserType
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     override fun onCreateView(
@@ -50,17 +57,32 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
 
     private fun setUserCards(view: View){
         userList = ArrayList()
-        dbUserCollection.document(curUser.uid!!).collection("chats").get().addOnSuccessListener {
-            for(doc in it){
-                val student = firestore.collection("users").document(doc.id)
-                setUser(student)
-            }
-            setRecyclerView(view)
+        if (userType == UserType.STUDENT) {
+            firestore.document(curUser.path!!).collection("chats").get()
+                .addOnSuccessListener {
+                    for (doc in it) {
+                        val student =  firestore.document(doc.getString("path")!!)
+                        setUser(student)
+                    }
+                    setRecyclerView(view)
+                }
+        }else{
+            firestore.document(curFacultyUser.path!!).collection("chats").get()
+                .addOnSuccessListener {
+                    for (doc in it) {
+                        val student = firestore.document(doc.getString("path")!!)
+                        setUser(student)
+                    }
+                    setRecyclerView(view)
+                }
         }
     }
 
     private fun setRecyclerView(view: View){
-        userAdapter = UsersNewChatAdapter(view.context,userList)
+        userAdapter = if(userType == UserType.STUDENT)
+            UsersNewChatAdapter(view.context,userList, curUser.path)
+        else
+            UsersNewChatAdapter(view.context,userList, curFacultyUser.path)
         recyclerView = binding.recyclerview
         recyclerView.adapter = userAdapter
         recyclerView.setHasFixedSize(true)
@@ -68,7 +90,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
 
     private fun setUser(stu: DocumentReference){
 
-        var userDoc = User()
+        var userDoc: User
 
         stu.get().addOnSuccessListener {
             val active = it.getBoolean("active")
@@ -79,8 +101,10 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
             val grp = it.getString("group")
             val yer = it.getLong("year")
             val firebaseUid = it.getString("firebaseUid")
-            userDoc = User(active, uid, firebaseUid, name, course, sec, grp, yer)
-            if(firebaseUid == curUser.firebaseUid)
+            val path = it.reference.path
+
+            userDoc = User(active, uid, firebaseUid, name, course, sec, grp, yer, path)
+            if(firebaseUid == FirebaseAuth.getInstance().currentUser?.uid)
                 return@addOnSuccessListener
             userList.add(0,userDoc!!)
             userAdapter.notifyItemInserted(userList.size-1)
@@ -91,10 +115,13 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
 
     private fun initializeValues(){
         firestore = FirebaseFirestore.getInstance()
-        dbUserCollection = firestore.collection("users")
         userList = ArrayList()
         val bundle = arguments
-        curUser = bundle?.getParcelable("user")!!
+        userType = bundle?.getSerializable("userType")!! as UserType
+        if(userType == UserType.FACULTY)
+            curFacultyUser = bundle.getParcelable("facultyUser")!!
+        else
+            curUser = bundle.getParcelable("user")!!
         checkIfEmpty()
     }
 

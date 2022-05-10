@@ -39,24 +39,29 @@ class SignUpActivity : AppCompatActivity() {
         super.onStart()
         val currentUser = firebaseAuth.currentUser
         if(currentUser != null){
-            firebaseAuth.signOut()
             loadingDialog.startLoading()
-            firestore.collection("user").whereEqualTo("firebaseUid",firebaseAuth.currentUser?.uid)
+            firestore.collection("users").whereEqualTo("firebaseUid",firebaseAuth.currentUser?.uid)
                 .get().addOnCompleteListener {
-                    if(!it.result.isEmpty) {
+                    if(it.result.documents.isNotEmpty()) {
                         loadingDialog.stopLoading()
                         setUser(it.result.documents[0])
                         loadingDialog.stopLoading()
                         return@addOnCompleteListener
                     }
-                    firestore.collection("faculty").whereEqualTo("firebaseUid",firebaseAuth.currentUser?.uid)
-                        .get().addOnSuccessListener {doc ->
-                            loadingDialog.stopLoading()
-                            setFacultyUser(doc.documents[0])
-                        }
-                        .addOnFailureListener {exc->
-                            Toast.makeText(this, "${exc.message}", Toast.LENGTH_SHORT).show()
-                        }
+                    else{
+                        firestore.collection("faculty").whereEqualTo("firebaseUid",firebaseAuth.currentUser?.uid)
+                            .get().addOnCompleteListener {doc ->
+                                loadingDialog.stopLoading()
+                                if(!doc.result.isEmpty){
+                                    setFacultyUser(doc.result.documents[0])
+                                    return@addOnCompleteListener
+                                }
+                                Toast.makeText(this, "${firebaseAuth.currentUser?.uid}", Toast.LENGTH_SHORT).show()
+                            }
+                            .addOnFailureListener {exc->
+                                Toast.makeText(this, "${exc.message}", Toast.LENGTH_SHORT).show()
+                            }
+                    }
                 }
         }
 
@@ -89,22 +94,26 @@ class SignUpActivity : AppCompatActivity() {
         val grp = usr.getString("group")
         val yer = usr.getLong("year")
         val firebaseUid = usr.getString("firebaseUid")
+        val path = usr.reference.path
 
         val intent = Intent(this,MainActivity::class.java).apply {
-            putExtra("user", User(active, usr.id, firebaseUid, name, course, sec, grp, yer))
+            putExtra("user", User(active, usr.id, firebaseUid, name, course, sec, grp, yer, path))
+            putExtra("userType",UserType.STUDENT)
         }
 
         startActivity(intent)
-
+        finish()
     }
 
     private fun setFacultyUser(usr:DocumentSnapshot){
         val active = usr.getBoolean("active")
         val name = usr.getString("name")
         val firebaseUid = usr.getString("firebaseUid")
+        val path = usr.reference.path
 
         val intent = Intent(this,FacultyMainActivity::class.java).apply {
-            putExtra("facultyuser", FacultyUser(active,usr.id, name, firebaseUid))
+            putExtra("facultyUser", FacultyUser(active,usr.id, name, firebaseUid, path))
+            putExtra("userType",UserType.FACULTY)
         }
 
         startActivity(intent)
@@ -129,23 +138,4 @@ class SignUpActivity : AppCompatActivity() {
         replaceFragment(RegisterStudentFragment())
     }
 
-//    private fun styleSignInText(){
-//        val txt = "Already a User? Sign In"
-//        val spannableString = SpannableString(txt)
-//        val clickableSpan:ClickableSpan = object : ClickableSpan(){
-//            override fun onClick(p0: View) {
-//                startActivity(Intent(this@SignUpActivity, LogInActivity::class.java))
-//                finish()
-//            }
-//
-//            override fun updateDrawState(ds: TextPaint) {
-//                super.updateDrawState(ds)
-//                ds.color = Color.RED
-//            }
-//        }
-//
-//        spannableString.setSpan(clickableSpan,16,spannableString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-//        binding.txtSignin.text = spannableString
-//        binding.txtSignin.movementMethod = LinkMovementMethod.getInstance()
-//    }
 }

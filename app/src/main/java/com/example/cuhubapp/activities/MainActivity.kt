@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.cuhubapp.R
+import com.example.cuhubapp.classes.FacultyUser
 import com.example.cuhubapp.classes.User
 import com.example.cuhubapp.databinding.ActivityMainBinding
 import com.example.cuhubapp.fragments.*
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var usersInSection:ArrayList<User>
     private lateinit var usersInGroup:ArrayList<User>
     private lateinit var curUser: User
+    private lateinit var userType:UserType
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +38,7 @@ class MainActivity : AppCompatActivity() {
                     replaceFragment(ChatsFragment())
                 }
                 R.id.menu_new_chat-> {
-                    replaceFragment(LoginFacultyFragment())
+                    replaceFragment(NewChatFragment())
                 }
                 R.id.menu_syllabus-> {
                     replaceFragment(SyllabusFragment())
@@ -59,6 +61,8 @@ class MainActivity : AppCompatActivity() {
 
         val bundle = Bundle()
         bundle.putParcelable("user", curUser)
+        bundle.putSerializable("userType", UserType.STUDENT)
+        bundle.putString("uid", curUser.uid)
         bundle.putParcelableArrayList("usersInSection",usersInSection)
         fragment.arguments = bundle
 
@@ -91,8 +95,9 @@ class MainActivity : AppCompatActivity() {
         val grp = usr.getString("group")
         val yer = usr.getLong("year")
         val firebaseUid = usr.getString("firebaseUid")
+        val path = usr.reference.path
 
-        return User(active, uid, firebaseUid, name, course, sec, grp, yer)
+        return User(active, uid, firebaseUid, name, course, sec, grp, yer, path)
     }
 
     private fun initializeValues() {
@@ -103,7 +108,12 @@ class MainActivity : AppCompatActivity() {
 
         curUser = User()
 
+        userType = intent.getSerializableExtra("userType") as UserType
         curUser = intent.getParcelableExtra("user")!!
 
     }
+}
+
+enum class UserType{
+    FACULTY,STUDENT
 }

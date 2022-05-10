@@ -5,10 +5,6 @@
         android:icon="@drawable/chats_tranparent"
         android:title="Chats"/>
     <item
-        android:id="@+id/menu_new_chat"
-        android:icon="@drawable/new_chat"
-        android:title="New Chat"/>
-    <item
         android:id="@+id/menu_classes"
         android:icon="@drawable/icon_crowd"
         android:title="Classes"/>

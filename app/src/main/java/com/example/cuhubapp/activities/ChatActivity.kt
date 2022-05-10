@@ -69,9 +69,10 @@ class ChatActivity : AppCompatActivity() {
             .setValue(message).addOnSuccessListener {
                 rtDatabase.child("chats").child(receiverRoom!!).child("messages").child(randomKey).setValue(message)
                 binding.textBox.setText("")
-                val chat = HashMap<String,Boolean>()
-                chat["chat"] = true
+                val chat = HashMap<String,String>()
+                chat["path"] = otherUserRef.path
                 curUserRef.collection("chats").document(otherUserRef.id).set(chat)
+                chat["path"] = curUserRef.path
                 otherUserRef.collection("chats").document(curUserRef.id).set(chat)
 
             }
@@ -114,12 +115,9 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun getUsers(){
-        firestore.collection("users").whereEqualTo("firebaseUid", senderUid).get().addOnSuccessListener {
-           curUserRef = it.documents[0].reference
-        }
-        firestore.collection("users").whereEqualTo("firebaseUid", receiverUid).get().addOnSuccessListener {
-           otherUserRef = it.documents[0].reference
-        }
+        val intent = intent
+        curUserRef = firestore.document(intent.getStringExtra("sender")!!)
+        otherUserRef = firestore.document(intent.getStringExtra("receiver")!!)
     }
 
     private fun initializeValues(){

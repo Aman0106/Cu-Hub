@@ -9,10 +9,7 @@ import com.example.cuhubapp.classes.FacultyUser
 import com.example.cuhubapp.classes.User
 import com.example.cuhubapp.databinding.ActivityFacultyMainBinding
 import com.example.cuhubapp.databinding.ActivityMainBinding
-import com.example.cuhubapp.fragments.ChatsFragment
-import com.example.cuhubapp.fragments.LoginFacultyFragment
-import com.example.cuhubapp.fragments.ProfileFragment
-import com.example.cuhubapp.fragments.SyllabusFragment
+import com.example.cuhubapp.fragments.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
 
@@ -28,7 +25,7 @@ class FacultyMainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_faculty_main)
         initializeValues()
 
-        Toast.makeText(this, "Welcome ${curUser.name}", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, "Welcome ${curUser.name}", Toast.LENGTH_SHORT).show()
 
         binding.bottomNavigation.setOnItemSelectedListener{
 
@@ -36,14 +33,11 @@ class FacultyMainActivity : AppCompatActivity() {
                 R.id.menu_chats-> {
                     replaceFragment(ChatsFragment())
                 }
-                R.id.menu_new_chat-> {
-                    replaceFragment(LoginFacultyFragment())
-                }
                 R.id.menu_classes-> {
                     replaceFragment(SyllabusFragment())
                 }
                 R.id.menu_profile-> {
-                    replaceFragment(ProfileFragment())
+                    replaceFragment(FacultyProfileFragment())
                 }
             }
 
@@ -58,38 +52,14 @@ class FacultyMainActivity : AppCompatActivity() {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
+        val bundle = Bundle()
+        bundle.putParcelable("facultyUser", curUser)
+        bundle.putString("uid", curUser.uid)
+        bundle.putSerializable("userType", UserType.FACULTY)
+        fragment.arguments = bundle
 
         fragmentTransaction.replace(R.id.frame_layout, fragment)
         fragmentTransaction.commit()
-    }
-//
-//    private fun getUserList():ArrayList<User>{
-//        usersInSection = ArrayList()
-//        firestore.collection("users")
-//            .whereEqualTo("course", curUser.course)
-//            .whereEqualTo("year",curUser.yer)
-//            .whereEqualTo("section",curUser.section)
-//            .get().addOnSuccessListener {
-//                for (usr in it){
-//                    val user = setUser(usr)
-//                    usersInSection += user
-//                }
-//                replaceFragment(ChatsFragment())
-//            }
-//        return usersInSection
-//    }
-
-    private fun setUser(usr: QueryDocumentSnapshot): User {
-        val active = usr.getBoolean("active")
-        val uid = usr.id
-        val name = usr.getString("name")
-        val course = usr.getString("course")
-        val sec = usr.getLong("section")
-        val grp = usr.getString("group")
-        val yer = usr.getLong("year")
-        val firebaseUid = usr.getString("firebaseUid")
-
-        return User(active, uid, firebaseUid, name, course, sec, grp, yer)
     }
 
     private fun initializeValues() {
@@ -100,7 +70,7 @@ class FacultyMainActivity : AppCompatActivity() {
 
         curUser = FacultyUser()
 
-        curUser = intent.getParcelableExtra("facultyuser")!!
-
+        curUser = intent.getParcelableExtra("facultyUser")!!
+        replaceFragment(ChatsFragment())
     }
 }
