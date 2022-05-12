@@ -25,7 +25,7 @@ class FacultyMainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_faculty_main)
         initializeValues()
 
-//        Toast.makeText(this, "Welcome ${curUser.name}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Welcome ${curUser.name}", Toast.LENGTH_SHORT).show()
 
         binding.bottomNavigation.setOnItemSelectedListener{
 
