@@ -19,8 +19,6 @@ class StringParser {
         var str = ""
         string.forEach{
             str += it.lowercase()
-//         if(it.isLetter()){
-//         }
         }
 
         return str

@@ -40,9 +40,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.menu_new_chat-> {
                     replaceFragment(NewChatFragment())
                 }
-                R.id.menu_syllabus-> {
-                    replaceFragment(SyllabusFragment())
-                }
                 R.id.menu_profile-> {
                     replaceFragment(ProfileFragment())
                 }
