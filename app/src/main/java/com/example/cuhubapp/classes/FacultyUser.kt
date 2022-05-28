@@ -9,7 +9,7 @@ class FacultyUser : Parcelable {
     var name:String? = null
     var uid:String? = null
     var firebaseUid:String? = null
-    var classes:List<String>? = null
+    var classes:ArrayList<String>? = null
     var path:String? = null
 
     constructor(parcel: Parcel) : this() {
@@ -40,7 +40,7 @@ class FacultyUser : Parcelable {
         uid:String?,
         name:String?,
         firebaseUid:String?,
-        classes:List<String>?
+        classes:ArrayList<String>?
     ){
         this.active = active
         this.uid = uid
@@ -53,7 +53,7 @@ class FacultyUser : Parcelable {
         uid:String?,
         name:String?,
         firebaseUid:String?,
-        classes:List<String>?,
+        classes:ArrayList<String>?,
         path:String?
     ){
         this.active = active

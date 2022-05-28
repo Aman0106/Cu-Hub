@@ -39,17 +39,8 @@
         app:itemActiveIndicatorStyle="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/separation_line"
+        app:layout_constraintTop_toBottomOf="@id/app_name"
         app:layout_constraintBottom_toTopOf="@id/frame_layout"
         app:menu="@menu/user_select_menu"/>
 
-    <View
-        android:id="@+id/separation_line"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="20dp"
-        android:background="?android:textColorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/app_name" />
 </androidx.constraintlayout.widget.ConstraintLayout>

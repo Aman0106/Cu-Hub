@@ -15,7 +15,7 @@ import com.google.firebase.firestore.DocumentReference
 
 class FacultyListAdapter(private val context: Context,
                          private val facultyList:ArrayList<FacultyUser>,
-                         private val sender:String?):RecyclerView.Adapter<FacultyListAdapter.UsersViewHolder>() {
+                         private val sender:String?): RecyclerView.Adapter<FacultyListAdapter.UsersViewHolder>() {
 
     private lateinit var binding: FacultyUserCardBinding
 
@@ -31,7 +31,6 @@ class FacultyListAdapter(private val context: Context,
         holder.firebaseUid = curUser.firebaseUid
         holder.active = curUser.active
         holder.receiver = curUser.path
-//        holder.txtSubject = curUser
         if(curUser.uid?.length!! > 8)
             holder.txtUid.text = curUser.uid
     }

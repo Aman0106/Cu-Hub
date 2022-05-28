@@ -55,6 +55,16 @@ class User: Parcelable  {
     constructor(name: String?) {
         this.name = name
     }
+
+    constructor(course: String?, section: Long?, group: String?, yer: Long?, path: String?) {
+        this.course = course
+        this.section = section
+        this.group = group
+        this.yer = yer
+        this.path = path
+    }
+
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeValue(active)
         parcel.writeString(uid)

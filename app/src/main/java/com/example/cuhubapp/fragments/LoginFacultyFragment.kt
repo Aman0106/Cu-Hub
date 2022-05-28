@@ -8,6 +8,7 @@ import android.text.Spanned
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -58,7 +59,8 @@ class LoginFacultyFragment : Fragment() {
 
     private fun signIn() {
         loadingDialog.startLoading()
-        val email = StringParser().toLowerCase(binding.edtUserEmail.text.toString())
+        var email = StringParser().toLowerCase(binding.edtUserEmail.text.toString())
+        email = StringParser().removeSpaceFromEnd(email)
         firebaseAuth.signInWithEmailAndPassword(
             email,
             binding.edtUserPassword.text.toString()
@@ -66,7 +68,7 @@ class LoginFacultyFragment : Fragment() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val doc = firestore.collection("faculty")
-                        .whereEqualTo("email", binding.edtUserEmail.text.toString())
+                        .whereEqualTo("email", email)
                     doc.get()
                         .addOnSuccessListener {
                             setFacultyUser(it.documents[0])

@@ -15,12 +15,10 @@ import com.example.cuhubapp.classes.FacultyUser
 import com.example.cuhubapp.classes.User
 import com.example.cuhubapp.databinding.FragmentChatsBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QueryDocumentSnapshot
+import com.google.firebase.firestore.*
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import java.lang.Exception
 
 class ChatsFragment : Fragment(R.layout.fragment_chats) {
 
@@ -61,8 +59,13 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
             firestore.document(curUser.path!!).collection("chats").get()
                 .addOnSuccessListener {
                     for (doc in it) {
-                        val student =  firestore.document(doc.getString("path")!!)
-                        setUser(student)
+                        try {
+                            val student =  firestore.document(doc.getString("path")!!)
+                            setUser(student)
+                        }
+                        catch (e:Exception){
+                            Toast.makeText(activity, "error", Toast.LENGTH_SHORT).show()
+                        }
                     }
                     setRecyclerView(view)
                 }

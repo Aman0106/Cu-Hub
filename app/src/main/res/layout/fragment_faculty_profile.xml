@@ -57,21 +57,22 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/separator"
-        android:padding="12dp"
+        android:clipChildren="false"
         android:clipToPadding="false"
         android:orientation="horizontal"
-        android:clipChildren="false">
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/separator">
 
         <!--    Time Table    -->
         <androidx.cardview.widget.CardView
             android:id="@+id/card_time_table"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
+            android:layout_centerInParent="true"
+            android:background="?colorSecondary"
             android:padding="15dp"
             app:cardBackgroundColor="?colorSecondary"
-            android:background="?colorSecondary"
             app:cardCornerRadius="10dp"
             app:cardElevation="5dp">
 
@@ -103,133 +104,7 @@
             </RelativeLayout>
 
         </androidx.cardview.widget.CardView>
-        <!--    Section    -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card_section"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/card_time_table"
-            android:layout_marginStart="100dp"
-            android:padding="15dp"
-            app:cardBackgroundColor="?colorSecondary"
-            android:background="?colorSecondary"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="5dp">
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp">
-
-                <ImageView
-                    android:id="@+id/icon_section"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:padding="4dp"
-                    android:src="@drawable/icon_crowd"
-                    app:tint="?android:textColorPrimary" />
-
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/icon_section"
-                    android:layout_alignLeft="@id/icon_section"
-                    android:layout_alignRight="@id/icon_section"
-                    android:gravity="center"
-                    android:text="Section"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="18sp" />
-
-            </RelativeLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <!--    Time Table    -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/card_time_table"
-            android:layout_marginTop="15dp"
-            android:layout_marginStart="18dp"
-            android:padding="15dp"
-            app:cardBackgroundColor="?colorSecondary"
-            android:background="?colorSecondary"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="5dp">
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp">
-
-                <ImageView
-                    android:id="@+id/icon_group"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:padding="4dp"
-                    android:src="@drawable/icon_people"
-                    app:tint="?android:textColorPrimary" />
-
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/icon_group"
-                    android:layout_alignLeft="@id/icon_group"
-                    android:layout_alignRight="@id/icon_group"
-                    android:gravity="center"
-                    android:text="Group"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="18sp" />
-
-            </RelativeLayout>
-
-        </androidx.cardview.widget.CardView>
-        <!--    Section    -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card_faculty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/card_time_table"
-            android:layout_marginTop="15dp"
-            android:layout_toEndOf="@id/card_group"
-            android:layout_marginStart="100dp"
-            android:padding="15dp"
-            app:cardBackgroundColor="?colorSecondary"
-            android:background="?colorSecondary"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="5dp">
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp">
-
-                <ImageView
-                    android:id="@+id/icon_faculty"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:padding="4dp"
-                    android:src="@drawable/icon_teacher"
-                    app:tint="?android:textColorPrimary" />
-
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/icon_faculty"
-                    android:layout_alignLeft="@id/icon_faculty"
-                    android:layout_alignRight="@id/icon_faculty"
-                    android:gravity="center"
-                    android:text="Faculty"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="18sp" />
-
-            </RelativeLayout>
-
-        </androidx.cardview.widget.CardView>
 
     </RelativeLayout>
 

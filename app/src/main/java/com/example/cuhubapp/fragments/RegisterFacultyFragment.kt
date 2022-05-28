@@ -55,7 +55,8 @@ class RegisterFacultyFragment : Fragment() {
 
     private fun signUp() {
         loadingDialog.startLoading()
-        val email = StringParser().toLowerCase(binding.edtUserEmail.text.toString())
+        var email = StringParser().toLowerCase(binding.edtUserEmail.text.toString())
+        email = StringParser().removeSpaceFromEnd(email)
         val usr = firestore.collection("faculty")
             .whereEqualTo("email", email)
 

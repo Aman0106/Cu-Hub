@@ -92,8 +92,9 @@ class StudentListActivity : AppCompatActivity() {
 
     private fun filterFaculty(){
         val facList = ArrayList<FacultyUser>()
-        val curUserClass:String = curUser.course+"/"+curUser.yer+"/"+curUser.section+"/"+curUser.group
-        val curUserClassAll:String = curUser.course+"/"+curUser.yer+"/"+curUser.section+"/ALL"
+        val curUserClass:String = curUser.yer.toString() + "/"+curUser.course + "/"+curUser.section.toString()+"/"+curUser.group
+        val curUserClassAll:String = curUser.yer.toString()+"/"+curUser.course+"/"+curUser.section.toString()+"/ALL"
+
         for (faculty in facultyList){
             for(cls in faculty.classes!!){
                 if(cls == curUserClassAll || cls == curUserClass){
@@ -142,9 +143,9 @@ class StudentListActivity : AppCompatActivity() {
         val active = fac.getBoolean("active")
         val uid = fac.id
         val name = fac.getString("name")
-        val classes: List<String> = fac.get("classes") as List<String>
         val firebaseUid = fac.getString("firebaseUid")
         val path = fac.reference.path
+        val classes: ArrayList<String>? = fac.get("classes") as ArrayList<String>?
 
         return FacultyUser(active, uid, name, firebaseUid, classes, path)
     }

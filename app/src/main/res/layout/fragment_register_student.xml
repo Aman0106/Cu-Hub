@@ -19,23 +19,33 @@
         <EditText
             android:id="@+id/edt_user_email"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="40dp"
-            android:layout_marginTop="80dp"
+            android:layout_height="45dp"
             android:hint="uic.19bca1000@gmail.com"
             android:maxLength="23"
-            android:paddingHorizontal="5dp" />
+            android:textSize="22sp"
+            android:background="@drawable/input_bg"
+            android:textCursorDrawable="@drawable/text_cursor"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="80dp"
+            android:padding="5dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="10dp"/>
 
         <EditText
             android:id="@+id/edt_user_password"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_below="@id/edt_user_email"
-            android:layout_marginHorizontal="40dp"
-            android:layout_marginTop="12dp"
             android:hint="Password"
             android:inputType="textPassword"
-            android:paddingHorizontal="5dp" />
+            android:textSize="22sp"
+            android:background="@drawable/input_bg"
+            android:textCursorDrawable="@drawable/text_cursor"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="14dp"
+            android:padding="5dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="12dp"/>
 
         <Button
             android:id="@+id/btn_sign_in"

@@ -58,4 +58,5 @@ class UsersNewChatAdapter(private val context: Context,
             }
         }
     }
+
 }

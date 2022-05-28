@@ -34,7 +34,7 @@ class FacultyMainActivity : AppCompatActivity() {
                     replaceFragment(ChatsFragment())
                 }
                 R.id.menu_classes-> {
-                    replaceFragment(SyllabusFragment())
+                    replaceFragment(ClassesFragment())
                 }
                 R.id.menu_profile-> {
                     replaceFragment(FacultyProfileFragment())

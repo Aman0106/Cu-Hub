@@ -78,7 +78,8 @@ class LoginStudentFragment : Fragment() {
 
     private fun signIn() {
         loadingDialog.startLoading()
-        val email = StringParser().toLowerCase(binding.edtUserEmail.text.toString())
+        var email = StringParser().toLowerCase(binding.edtUserEmail.text.toString())
+        email = StringParser().removeSpaceFromEnd(email)
         firebaseAuth.signInWithEmailAndPassword(
             email,
             binding.edtUserPassword.text.toString()
@@ -86,7 +87,7 @@ class LoginStudentFragment : Fragment() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val doc = firestore.collection("users")
-                        .whereEqualTo("email", binding.edtUserEmail.text.toString())
+                        .whereEqualTo("email", email)
                     doc.get()
                         .addOnSuccessListener {
                             if(it.isEmpty){

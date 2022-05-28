@@ -33,7 +33,8 @@
                 android:layout_weight="100"
                 android:paddingHorizontal="5dp"
                 android:hint="Type..."
-                android:background="@color/transparent"/>
+                android:background="@color/transparent"
+                android:textCursorDrawable="@drawable/text_cursor"/>
 
 
         </LinearLayout>
